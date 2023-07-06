@@ -17,17 +17,19 @@ BEGIN
     
     IF contEmails < 1 AND contUsernames < 1 THEN
         INSERT INTO [gallery_exp].[users]
-    VALUES 
-        (DEFAULT
-        ,2::SMALLINT
-        ,email1
-        ,pass1
-        ,username1
-        ,name1
-        ,GETDATE()
-        ,img_profile1
-        ,apellido_paterno1
-        ,apellido_materno1);
+        VALUES 
+        (
+            DEFAULT
+            ,2::SMALLINT
+            ,email1
+            ,pass1
+            ,username1
+            ,name1
+            ,GETDATE()
+            ,img_profile1
+            ,apellido_paterno1
+            ,apellido_materno1
+        );
     END IF;
     
 END; $$ LANGUAGE plpgsql;
