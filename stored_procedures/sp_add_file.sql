@@ -1,15 +1,15 @@
-CREATE OR REPLACE PROCEDURE "gallery_exp"."sp_add_file"(
+DELIMITER //
+CREATE PROCEDURE gallery_exp.sp_add_file(
     fk_user BIGINT
     ,name_file VARCHAR(125)
     ,url_file VARCHAR(256)
     ,sha256 VARCHAR(256)
-    ,date_uploaded TIMESTAMP WITHOUT TIME ZONE
+    ,date_uploaded DATETIME
     ,extension_file VARCHAR(10)
     ,size_file VARCHAR(100)
 )
-AS $$
 BEGIN
-    INSERT INTO "gallery_exp"."files"
+    INSERT INTO gallery_exp.files
     VALUES
     (
         DEFAULT
@@ -23,11 +23,11 @@ BEGIN
         ,TRUE
     );
 
-END; $$ LANGUAGE plpgsql;
+END;
 
 -- EXAMPLE
 /*
-CALL "gallery_exp"."sp_add_file"(
+CALL gallery_exp.sp_add_file(
     1
     ,'archivo.png'
     ,'www.algo.com/files/images/img/asiuOijuslkj123.png'

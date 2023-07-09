@@ -1,5 +1,5 @@
 INSERT INTO
-    [gallery_exp].[status]
+    gallery_exp.status
 VALUES
     (0, 'ACTIVE'),
     (1, 'A'),
