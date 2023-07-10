@@ -5,7 +5,7 @@ CREATE PROCEDURE gallery_exp.sp_add_tag(
 )
 BEGIN
     DECLARE contName SMALLINT;
-    SELECT COUNT(*) INTO contName FROM gallery_exp.tags WHERE name = name1;
+    SELECT COUNT(*) INTO contName FROM gallery_exp.tags AS t WHERE t.name = name;
     IF contName < 1 THEN
         INSERT INTO gallery_exp.tags
         VALUES
@@ -13,7 +13,7 @@ BEGIN
             DEFAULT
             ,name
             ,description
-            ,GETDATE()
+            ,NOW()
             ,DEFAULT
             ,DEFAULT
         );

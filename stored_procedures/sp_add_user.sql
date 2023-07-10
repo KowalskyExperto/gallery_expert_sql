@@ -12,16 +12,16 @@ CREATE PROCEDURE gallery_exp.sp_add_user(
 proc:BEGIN
     DECLARE contEmails, contUsernames INT;
 
-    SELECT COUNT(*) INTO contEmails FROM gallery_exp.users as u WHERE u.email = email;
-    SELECT COUNT(*) INTO contUsernames FROM gallery_exp.users as u WHERE u.username = username;
+    SELECT COUNT(*) INTO contEmails FROM gallery_exp.users AS u WHERE u.email = email;
+    SELECT COUNT(*) INTO contUsernames FROM gallery_exp.users AS u WHERE u.username = username;
 
     IF(contEmails >= 1) THEN
-        SELECT 400 AS "code" ,'Email alredy exists' AS "description";
+        SELECT 400 AS "code" ,'ERROR: Email alredy exists' AS "description";
         LEAVE proc;
     END IF;
 
     IF(contUsernames >= 1) THEN
-        SELECT 400 AS "code" ,'Username alredy exists' AS "description";
+        SELECT 400 AS "code" ,'ERROR: Username alredy exists' AS "description";
         LEAVE proc;
     END IF;
     
