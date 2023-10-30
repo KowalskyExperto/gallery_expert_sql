@@ -1,33 +1,44 @@
-DELIMITER //
-CREATE PROCEDURE gallery_exp.sp_add_file(
-    fk_user BIGINT
-    ,name_file VARCHAR(125)
-    ,url_file VARCHAR(256)
-    ,sha256 VARCHAR(256)
-    ,date_uploaded DATETIME
-    ,extension_file VARCHAR(10)
-    ,size_file VARCHAR(100)
-)
+USE [gallery_exp]
+GO
+CREATE OR ALTER PROCEDURE [app].[sp_add_file]
+    @fk_user BIGINT
+    ,@name_file VARCHAR(125)
+    ,@url_file VARCHAR(256)
+    ,@sha256 VARCHAR(256)
+    ,@date_uploaded DATETIME
+    ,@extension_file VARCHAR(10)
+    ,@size_file VARCHAR(100)
+AS
 BEGIN
-    INSERT INTO gallery_exp.files
+    SET NOCOUNT ON
+    INSERT INTO [app].[files]
+    (
+        [fk_user]
+        ,[name_file]
+        ,[url_file]
+        ,[sha256]
+        ,[date_uploaded]
+        ,[extension_file]
+        ,[size_file]
+        ,[status]
+    )
     VALUES
     (
-        DEFAULT
-        ,fk_user
-        ,name_file
-        ,url_file
-        ,sha256
-        ,date_uploaded
-        ,extension_file
-        ,size_file
-        ,TRUE
+        @fk_user
+        ,@name_file
+        ,@url_file
+        ,@sha256
+        ,@date_uploaded
+        ,@extension_file
+        ,@size_file
+        ,DEFAULT
     );
-
+    SELECT 200 AS "code" ,'SUCCESS: File Uploaded' AS "description";
 END;
 
 -- EXAMPLE
 /*
-CALL gallery_exp.sp_add_file(
+EXEC gallery_exp.sp_add_file
     1
     ,'archivo.png'
     ,'www.algo.com/files/images/img/asiuOijuslkj123.png'
@@ -35,5 +46,5 @@ CALL gallery_exp.sp_add_file(
     ,1688598991
     ,'png'
     ,'1271312'
-)
+
 */

@@ -1,25 +1,29 @@
-DELIMITER //
-CREATE PROCEDURE gallery_exp.sp_update_user_apellido_paterno(
-    id_user BIGINT
-    ,email VARCHAR(150)
-    ,pass VARCHAR(35)
-    ,apellido_paterno VARCHAR(30)
-)
-proc_update_user_apellido_paterno:BEGIN
+USE [gallery_exp]
+GO
+CREATE OR ALTER PROCEDURE [app].[sp_update_user_apellido_materno]
+    @id_user BIGINT
+    ,@email VARCHAR(150)
+    ,@pass VARCHAR(35)
+    ,@apellido_paterno VARCHAR(30)
+AS
+BEGIN
+    SET NOCOUNT ON
+    IF (SELECT COUNT(*) FROM [app].[users] AS [u] WHERE [u].[id_user] = @id_user AND [u].[fk_status] = 0) < 1
+    BEGIN
+        SELECT 404 AS "code" ,'ERROR: This user doesn''t exist' AS "description";
+        RETURN -1;
+    END;
 
-    IF (SELECT COUNT(*) FROM gallery_exp.users AS u WHERE u.id_user = id_user AND u.fk_status = 0) < 1 THEN
-        SELECT 404 AS "code" ,"ERROR: This user doesn't exist" AS "description";
-        LEAVE proc_update_user_apellido_paterno;
-    END IF;
+    IF (SELECT COUNT(*) FROM [app].[users] AS [u] WHERE [u].[id_user] = @id_user AND [u].[pass] = @pass AND [u].[email] = @email) < 1
+    BEGIN
+        SELECT 400 AS "code" ,'ERROR: Wrong credentials' AS "description";
+        RETURN -1;
+    END;
 
-    IF (SELECT COUNT(*) FROM gallery_exp.users AS u WHERE u.id_user = id_user AND u.pass = pass AND u.email = email) < 1 THEN
-        SELECT 400 AS "code" ,"ERROR: Wrong credentials" AS "description";
-        LEAVE proc_update_user_apellido_paterno;
-    END IF;
+    UPDATE [app].[users]
+    SET [users].[apellido_paterno] = @apellido_paterno
+    WHERE [users].[id_user] = @id_user;
 
-    UPDATE gallery_exp.users AS u
-    SET u.apellido_paterno = apellido_paterno
-    WHERE u.id_user = id_user;
-
-    SELECT 200 AS "code" ,'SUCCESS: Apellido Paterno changed' AS "description";
+    SELECT 200 AS "code" ,'SUCCESS: Apellido Materno changed' AS "description";
+    RETURN 1;
 END;

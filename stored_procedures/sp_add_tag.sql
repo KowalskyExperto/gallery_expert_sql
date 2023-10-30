@@ -1,29 +1,36 @@
-DELIMITER //
-CREATE PROCEDURE gallery_exp.sp_add_tag(
-    name VARCHAR(50)
-    ,description VARCHAR(100)
-)
+USE [gallery_exp]
+GO
+CREATE OR ALTER PROCEDURE [app].[sp_add_tag]
+    @name VARCHAR(50)
+    ,@description VARCHAR(100)
+AS
 BEGIN
-    DECLARE contName SMALLINT;
-    SELECT COUNT(*) INTO contName FROM gallery_exp.tags AS t WHERE t.name = name;
-    IF contName < 1 THEN
-        INSERT INTO gallery_exp.tags
+    DECLARE @contName SMALLINT;
+    SELECT @contName=COUNT(*) FROM [app].[tags] AS [t] WHERE [t].[name] = @name;
+    IF @contName < 1
+    BEGIN
+        INSERT INTO [app].[tags]
+        (
+            [name]
+            ,[description]
+            ,[created_at]
+            ,[count]
+            ,[status]
+        )
         VALUES
         (
-            DEFAULT
-            ,name
-            ,description
-            ,NOW()
+            @name
+            ,@description
+            ,GETDATE()
             ,DEFAULT
             ,DEFAULT
         );
-    END IF;
+    END;
 END;
 
 --EXAMPLE:
 /*
-CALL gallery_exp.sp_add_tag(
+EXEC [app].[sp_add_tag]
     'bonito'
     ,'Cosas bonitas XD'
-);
 */

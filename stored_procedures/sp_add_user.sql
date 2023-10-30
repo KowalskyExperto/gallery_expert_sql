@@ -1,48 +1,57 @@
-USE gallery_exp;
-DELIMITER //
-CREATE PROCEDURE gallery_exp.sp_add_user(
-    email VARCHAR(125)
-    ,pass VARCHAR(125)
-    ,username VARCHAR(16)
-    ,name VARCHAR(20)
-    ,img_profile VARCHAR(256)
-    ,apellido_paterno VARCHAR(30)
-    ,apellido_materno VARCHAR(30)
-)
-proc:BEGIN
-    DECLARE contEmails, contUsernames INT;
+USE [gallery_exp]
+GO
+CREATE OR ALTER PROCEDURE [app].[sp_add_user]
+    @email VARCHAR(125)
+    ,@pass VARCHAR(125)
+    ,@username VARCHAR(16)
+    ,@name VARCHAR(20)
+    ,@img_profile VARCHAR(256)
+    ,@apellido_paterno VARCHAR(30)
+    ,@apellido_materno VARCHAR(30)
+AS
+BEGIN
+    SET NOCOUNT ON
+    DECLARE @contEmails INT, @contUsernames INT;
 
-    SELECT COUNT(*) INTO contEmails FROM gallery_exp.users AS u WHERE u.email = email;
-    SELECT COUNT(*) INTO contUsernames FROM gallery_exp.users AS u WHERE u.username = username;
-
-    IF(contEmails >= 1) THEN
+    SELECT @contEmails=COUNT(*) FROM [app].[users] AS u WHERE [u].[email] = @email;
+    SELECT @contUsernames=COUNT(*) FROM [app].[users] AS u WHERE [u].[username] = @username;
+    PRINT @contEmails
+    IF(@contEmails >= 1) 
+	BEGIN
         SELECT 400 AS "code" ,'ERROR: Email alredy exists' AS "description";
-        LEAVE proc;
-    END IF;
+        RETURN -1;
+    END;
 
-    IF(contUsernames >= 1) THEN
+    IF(@contUsernames >= 1)
+	BEGIN
         SELECT 400 AS "code" ,'ERROR: Username alredy exists' AS "description";
-        LEAVE proc;
-    END IF;
+        RETURN -1;
+    END;
     
-    INSERT INTO gallery_exp.users
+    INSERT INTO [app].[users] (
+        [email]
+        ,[pass]
+        ,[username]
+        ,[name]
+        ,[img_profile]
+        ,[apellido_paterno]
+        ,[apellido_materno])
     VALUES 
     (
-        DEFAULT
-        ,2
-        ,email
-        ,pass
-        ,username
-        ,name
-        ,NOW()
-        ,img_profile
-        ,apellido_paterno
-        ,apellido_materno
+        @email
+        ,@pass
+        ,@username
+        ,@name
+        ,@img_profile
+        ,@apellido_paterno
+        ,@apellido_materno
     );
 END;
 -- EXAMPLE:
 /*
-CALL gallery_exp.sp_add_user(
+USE [gallery_exp];
+GO
+EXEC [app].[sp_add_user]
     'kowalskyexperto@gmail.com'
     ,'alfa12234'
     ,'KowaGogle1'
@@ -50,5 +59,5 @@ CALL gallery_exp.sp_add_user(
     ,NULL
     ,NULL
     ,NULL
-);
+;
 */

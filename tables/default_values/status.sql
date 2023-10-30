@@ -1,5 +1,5 @@
 INSERT INTO
-    gallery_exp.status
+    [app].[status]
 VALUES
     (0, 'ACTIVE'),
     (1, 'INACTIVE'),

@@ -1,5 +1,2 @@
-USE gallery_exp;
-
-
--- Add User
-DELIMITER //
+USE [gallery_exp]
+GO
